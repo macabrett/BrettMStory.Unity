@@ -1,12 +1,8 @@
 ﻿namespace BrettMStory.Unity {
-    using UnityEngine;
-    using System.Collections.Generic;
 
-    /// <summary>
-    /// A pool delegate for releasing and getting pool objects.
-    /// </summary>
-    /// <param name="poolObject">A pool object.</param>
-    public delegate void PoolFunction(GameObject poolObject);
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
 
     /// <summary>
     /// A pool of game objects.
@@ -16,12 +12,12 @@
         /// <summary>
         /// The on get method.
         /// </summary>
-        private readonly PoolFunction _onGet;
+        private readonly Action<GameObject> _onGet;
 
         /// <summary>
         /// The on release method.
         /// </summary>
-        private readonly PoolFunction _onRelease;
+        private readonly Action<GameObject> _onRelease;
 
         /// <summary>
         /// The prefab to pull from the pool.
@@ -65,7 +61,7 @@
         /// <param name="maxSize">The max size.</param>
         /// <param name="getFunction">A function to be called on a game object when it is gotten from the pool.</param>
         /// <param name="releaseFunction">A function to be called on a game object when it is released back to the pool.</param>
-        public GameObjectPool(GameObject prefab, int startingSize, int maxSize, PoolFunction getFunction, PoolFunction releaseFunction) {
+        public GameObjectPool(GameObject prefab, int startingSize, int maxSize, Action<GameObject> getFunction, Action<GameObject> releaseFunction) {
             this._prefab = prefab;
             this._maxSize = maxSize;
             this.Preload(startingSize);
@@ -82,7 +78,8 @@
 
             if (this._stack.Count > 0) {
                 poolObject = this._stack.Pop();
-            } else if (this._totalObjects < this._maxSize) {
+            }
+            else if (this._totalObjects < this._maxSize) {
                 poolObject = this.Instantiate();
             }
 
@@ -104,26 +101,6 @@
         }
 
         /// <summary>
-        /// Instantiates a new game object.
-        /// </summary>
-        /// <returns>The instantiated game object.</returns>
-        private GameObject Instantiate() {
-            var poolObject = GameObject.Instantiate(this._prefab) as GameObject;
-            this._totalObjects++;
-            return poolObject;
-        }
-
-        /// <summary>
-        /// Preloads 
-        /// </summary>
-        /// <param name="number"></param>
-        private void Preload(int number) {
-            for (int i = 0; i < number; i++) {
-                this.ReleaseObject(this.Instantiate());
-            }
-        }
-
-        /// <summary>
         /// The default method to be called when getting a pool object.
         /// </summary>
         /// <param name="poolObject">The pool object.</param>
@@ -137,6 +114,26 @@
         /// <param name="poolObject">The pool object.</param>
         private void DefaultOnRelease(GameObject poolObject) {
             poolObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Instantiates a new game object.
+        /// </summary>
+        /// <returns>The instantiated game object.</returns>
+        private GameObject Instantiate() {
+            var poolObject = GameObject.Instantiate(this._prefab) as GameObject;
+            this._totalObjects++;
+            return poolObject;
+        }
+
+        /// <summary>
+        /// Preloads
+        /// </summary>
+        /// <param name="number"></param>
+        private void Preload(int number) {
+            for (int i = 0; i < number; i++) {
+                this.ReleaseObject(this.Instantiate());
+            }
         }
     }
 }
