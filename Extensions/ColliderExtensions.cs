@@ -35,8 +35,11 @@
         /// Gets current collisions' component with a sphere collider.
         /// </summary>
         /// <param name="sphereCollider">The sphere collider.</param>
+        /// <param name="type">The type.</param>
         /// <param name="layerName">The layer name for layer mask.</param>
-        /// <returns>Overlapped components.</returns>
+        /// <returns>
+        /// Overlapped components.
+        /// </returns>
         public static object[] ToOverlappedComponents(this SphereCollider sphereCollider, Type type, string layerName) {
             var colliders = sphereCollider.ToOverlappedColliders(layerName);
             return colliders.Select(x => x.GetComponent(type)).ToArray();
@@ -45,10 +48,11 @@
         /// <summary>
         /// Gets current collisions' game object with a sphere collider.
         /// </summary>
-        /// <typeparam name="T">The component to get out of it.</typeparam>
         /// <param name="sphereCollider">The sphere collider.</param>
         /// <param name="layerName">The layer name for layer mask.</param>
-        /// <returns>Overlapped game objects.</returns>
+        /// <returns>
+        /// Overlapped game objects.
+        /// </returns>
         public static GameObject[] ToOverlappedGameObjects(this SphereCollider sphereCollider, string layerName) {
             var colliders = sphereCollider.ToOverlappedColliders(layerName);
             return colliders.Select(x => x.gameObject).ToArray();
