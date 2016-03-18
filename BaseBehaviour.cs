@@ -152,6 +152,22 @@
         }
 
         /// <summary>
+        /// Gets or sets the tag.
+        /// </summary>
+        /// <value>
+        /// The tag.
+        /// </value>
+        public string Tag {
+            get {
+                return this.GameObject.tag;
+            }
+
+            set {
+                this.GameObject.tag = value;
+            }
+        }
+
+        /// <summary>
         /// Gets the transform of the game object.
         /// </summary>
         public Transform Transform {
@@ -170,6 +186,7 @@
         protected virtual void Awake() {
             this.HandleAttachComponentAttributes();
             this.HandleAttachComponentToFieldAttributes();
+            this.HandleTagGameObjectAttribute();
         }
 
         /// <summary>
@@ -336,6 +353,18 @@
         }
 
         /// <summary>
+        /// Handles the tag game object attribute.
+        /// </summary>
+        private void HandleTagGameObjectAttribute() {
+            var attachAttributes = this.GetAttributes<TagGameObject>().ToArray();
+
+            if (attachAttributes.Length > 0) {
+                var attribute = attachAttributes[0];
+                this.Tag = attribute.Tag;
+            }
+        }
+
+        /// <summary>
         /// An attribute for adding components to a BaseBehaviour and optionally assigning them to a property.
         /// </summary>
         [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
@@ -442,6 +471,30 @@
             ///   <c>true</c> if [start enabled]; otherwise, <c>false</c>.
             /// </value>
             public bool StartEnabled { get; private set; }
+        }
+
+        /// <summary>
+        /// Attribute for tagging a game object.
+        /// </summary>
+        /// <seealso cref="System.Attribute" />
+        [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+        public sealed class TagGameObject : Attribute {
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TagGameObject"/> class.
+            /// </summary>
+            /// <param name="tag">The tag.</param>
+            public TagGameObject(string tag) {
+                this.Tag = tag;
+            }
+
+            /// <summary>
+            /// Gets the tag.
+            /// </summary>
+            /// <value>
+            /// The tag.
+            /// </value>
+            public string Tag { get; private set; }
         }
     }
 }
