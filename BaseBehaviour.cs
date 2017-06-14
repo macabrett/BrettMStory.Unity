@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using System;
     using System.Collections;
@@ -17,30 +17,16 @@
         private const string BusyCoroutineName = "BusyDelay";
 
         /// <summary>
-        /// Backing field for game object caching.
-        /// </summary>
-        private GameObject _gameObject;
-
-        /// <summary>
         /// A value indicating whether or not this behaviour is busy.
         /// </summary>
         private bool _isBusy = false;
-
-        /// <summary>
-        /// Backing field for transform caching.
-        /// </summary>
-        private Transform _transform;
 
         /// <summary>
         /// Gets the gameo object attached to this behaviour.
         /// </summary>
         public GameObject GameObject {
             get {
-                if (this._gameObject == null) {
-                    this._gameObject = this.gameObject;
-                }
-
-                return this._gameObject;
+                return this.gameObject;
             }
         }
 
@@ -73,46 +59,20 @@
         /// <summary>
         /// Gets or sets the position.
         /// </summary>
-        public Vector3 Position {
+        public Vector2 Position {
             get {
                 return this.Transform.position;
             }
 
             set {
-                this.Transform.position = value;
+                this.Transform.position = new Vector3(value.x, value.y, 0f);
             }
         }
 
         /// <summary>
-        /// Gets or sets the 2D position.
+        /// Gets or sets the rotation (along the z-axis)
         /// </summary>
-        public Vector2 Position2D {
-            get {
-                return this.Transform.position;
-            }
-
-            set {
-                this.Transform.position = new Vector3(value.x, value.y, this.Position.z);
-            }
-        }
-
-        /// <summary>
-        /// gets or sets the rotation of the transform.
-        /// </summary>
-        public Vector3 Rotation {
-            get {
-                return this.Transform.eulerAngles;
-            }
-
-            set {
-                this.Transform.eulerAngles = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the 2D rotation (along the z-axis)
-        /// </summary>
-        public float Rotation2D {
+        public float Rotation {
             get {
                 return this.Transform.eulerAngles.z;
             }
@@ -123,40 +83,23 @@
         }
 
         /// <summary>
-        /// Gets or sets the scale of the transform.
+        /// Gets or sets the scale.
         /// </summary>
-        public Vector3 Scale {
-            get {
-                return this.Transform.localScale;
-            }
-
-            set {
-                this.Transform.localScale = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the scale2 d.
-        /// </summary>
-        /// <value>
-        /// The scale2 d.
-        /// </value>
-        public Vector2 Scale2D {
+        /// <value>The scale.</value>
+        public Vector2 Scale {
             get {
                 return this.Transform.localScale.ToVector2();
             }
 
             set {
-                this.Transform.localScale = new Vector3(value.x, value.y, this.Scale.z);
+                this.Transform.localScale = new Vector3(value.x, value.y, 1f);
             }
         }
 
         /// <summary>
         /// Gets or sets the tag.
         /// </summary>
-        /// <value>
-        /// The tag.
-        /// </value>
+        /// <value>The tag.</value>
         public string Tag {
             get {
                 return this.GameObject.tag;
@@ -172,11 +115,7 @@
         /// </summary>
         public Transform Transform {
             get {
-                if (this._transform == null) {
-                    this._transform = this.transform;
-                }
-
-                return this._transform;
+                return this.transform;
             }
         }
 
@@ -241,18 +180,16 @@
         }
 
         /// <summary>
-        /// Handles attaching components and optionally assigning them to properties, if any AttachBehaviour attributes exist.
+        /// Handles attaching components and optionally assigning them to properties, if any
+        /// AttachBehaviour attributes exist.
         /// </summary>
         private void HandleAttachComponentAttributes() {
             var attachAttributes = this.GetAttributes<AttachComponentAttribute>().ToArray();
 
-            for (int i = 0; i < attachAttributes.Length; i++) {
+            for (var i = 0; i < attachAttributes.Length; i++) {
                 var attribute = attachAttributes[i];
                 if (!attribute.ComponentType.IsSubclassOf(typeof(Component))) {
-                    throw new NotSupportedException(
-                        string.Format(
-                            "The AttachComponent attribute can only be used to attach Components. Type {0} is not a Component.",
-                            attribute.ComponentType.Name));
+                    throw new NotSupportedException($"The AttachComponent attribute can only be used to attach Components. Type '{attribute.ComponentType.Name}' is not a Component.");
                 }
 
                 var component = this.GetOrAddComponent(attribute.ComponentType);
@@ -262,53 +199,35 @@
                 }
 
                 var propertyInfo = this.GetType().GetProperty(attribute.PropertyName);
-
                 if (propertyInfo == null) {
-                    throw new NotSupportedException(
-                        string.Format(
-                            "The AttachComponent attribute could not assign to property with name '{0}' on class '{1}', because it does not exist.",
-                            attribute.PropertyName,
-                            this.GetType().Name));
+                    throw new NotSupportedException($"The AttachComponent attribute could not assign to property with name '{attribute.PropertyName}' on class '{this.GetType().Name}', because it does not exist.");
                 }
-
-                if (!propertyInfo.CanWrite) {
-                    throw new NotSupportedException(
-                        string.Format(
-                            "The AttachComponent attribute could not assign to property with name '{0}' on class '{1}', because it is a read only property.",
-                            attribute.PropertyName,
-                            this.GetType().Name));
+                else if (!propertyInfo.CanWrite) {
+                    throw new NotSupportedException($"The AttachComponent attribute could not assign to property with name '{attribute.PropertyName}' on class '{this.GetType().Name}', because it is a read only property.");
                 }
-
-                if (propertyInfo.PropertyType != attribute.ComponentType) {
-                    throw new NotSupportedException(
-                    string.Format(
-                        "The AttachComponent attribute could not assign to property with name '{0}' on class '{1}', because the property is not of the same type.",
-                        attribute.PropertyName,
-                        this.GetType().Name));
+                else if (propertyInfo.PropertyType != attribute.ComponentType) {
+                    throw new NotSupportedException($"The AttachComponent attribute could not assign to property with name '{attribute.PropertyName}' on class '{this.GetType().Name}', because the property is not of the same type.");
                 }
 
                 propertyInfo.SetValue(this, component, null);
 
-                var behaviour = component as MonoBehaviour;
-                if (behaviour != null) {
+                if (component is MonoBehaviour behaviour) {
                     behaviour.enabled = attribute.StartEnabled;
                 }
             }
         }
 
         /// <summary>
-        /// Handles attaching components and assigning them to fields, if any AttachComponent attributes exist.
+        /// Handles attaching components and assigning them to fields, if any AttachComponent
+        /// attributes exist.
         /// </summary>
         private void HandleAttachComponentToFieldAttributes() {
             var attachAttributes = this.GetAttributes<AttachComponentToFieldAttribute>().ToArray();
 
-            for (int i = 0; i < attachAttributes.Length; i++) {
+            for (var i = 0; i < attachAttributes.Length; i++) {
                 var attribute = attachAttributes[i];
                 if (!attribute.ComponentType.IsSubclassOf(typeof(Component))) {
-                    throw new NotSupportedException(
-                        string.Format(
-                            "The AttachComponentToField attribute can only be used to attach Components. Type {0} is not a Component.",
-                            attribute.ComponentType.Name));
+                    throw new NotSupportedException($"The AttachComponentToField attribute can only be used to attach Components. Type '{attribute.ComponentType.Name}' is not a Component.");
                 }
 
                 var component = this.GetOrAddComponent(attribute.ComponentType);
@@ -320,33 +239,18 @@
                 var fieldInfo = this.GetType().GetField(attribute.FieldName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
                 if (fieldInfo == null) {
-                    throw new NotSupportedException(
-                        string.Format(
-                            "The AttachComponentToField attribute could not assign to field with name '{0}' on class '{1}', because it does not exist.",
-                            attribute.FieldName,
-                            this.GetType().Name));
+                    throw new NotSupportedException($"The AttachComponentToField attribute could not assign to field with name '{attribute.FieldName}' on class '{this.GetType().Name}', because it does not exist.");
                 }
-
-                if (fieldInfo.IsInitOnly) {
-                    throw new NotSupportedException(
-                        string.Format(
-                            "The AttachComponentToField attribute could not assign to field with name '{0}' on class '{1}', because it is a read only field.",
-                            attribute.FieldName,
-                            this.GetType().Name));
+                else if (fieldInfo.IsInitOnly) {
+                    throw new NotSupportedException($"The AttachComponentToField attribute could not assign to field with name '{attribute.FieldName}' on class '{this.GetType().Name}', because it is a read only field.");
                 }
-
-                if (fieldInfo.FieldType != attribute.ComponentType) {
-                    throw new NotSupportedException(
-                    string.Format(
-                        "The AttachComponentToField attribute could not assign to field with name '{0}' on class '{1}', because the field is not of the same type.",
-                        attribute.FieldName,
-                        this.GetType().Name));
+                else if (fieldInfo.FieldType != attribute.ComponentType) {
+                    throw new NotSupportedException($"The AttachComponentToField attribute could not assign to field with name '{attribute.FieldName}' on class '{this.GetType().Name}', because the field is not of the same type.");
                 }
 
                 fieldInfo.SetValue(this, component);
 
-                var behaviour = component as MonoBehaviour;
-                if (behaviour != null) {
+                if (component is MonoBehaviour behaviour) {
                     behaviour.enabled = attribute.StartEnabled;
                 }
             }
@@ -371,14 +275,14 @@
         public sealed class AttachComponentAttribute : Attribute {
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="AttachComponentAttribute" /> class.
+            /// Initializes a new instance of the <see cref="AttachComponentAttribute"/> class.
             /// </summary>
             /// <param name="componentType">Type of the component.</param>
             public AttachComponentAttribute(Type componentType) : this(componentType, string.Empty) {
             }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="AttachComponentAttribute" /> class.
+            /// Initializes a new instance of the <see cref="AttachComponentAttribute"/> class.
             /// </summary>
             /// <param name="componentType">Type of the component.</param>
             /// <param name="propertyName">Name of the property to set this behaviour to.</param>
@@ -386,7 +290,7 @@
             }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="AttachComponentAttribute" /> class.
+            /// Initializes a new instance of the <see cref="AttachComponentAttribute"/> class.
             /// </summary>
             /// <param name="componentType">Type of the component.</param>
             /// <param name="propertyName">Name of the property.</param>
@@ -400,25 +304,19 @@
             /// <summary>
             /// Gets the type of the component.
             /// </summary>
-            /// <value>
-            /// The type of the component.
-            /// </value>
+            /// <value>The type of the component.</value>
             public Type ComponentType { get; private set; }
 
             /// <summary>
             /// Gets the name of the property to .
             /// </summary>
-            /// <value>
-            /// The name of the property.
-            /// </value>
+            /// <value>The name of the property.</value>
             public string PropertyName { get; private set; }
 
             /// <summary>
             /// Gets a value indicating whether [start enabled].
             /// </summary>
-            /// <value>
-            ///   <c>true</c> if [start enabled]; otherwise, <c>false</c>.
-            /// </value>
+            /// <value><c>true</c> if [start enabled]; otherwise, <c>false</c>.</value>
             public bool StartEnabled { get; private set; }
         }
 
@@ -429,7 +327,7 @@
         public sealed class AttachComponentToFieldAttribute : Attribute {
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="AttachComponentToFieldAttribute" /> class.
+            /// Initializes a new instance of the <see cref="AttachComponentToFieldAttribute"/> class.
             /// </summary>
             /// <param name="componentType">Type of the component.</param>
             /// <param name="fieldName">Name of the field.</param>
@@ -437,7 +335,7 @@
             }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="AttachComponentToFieldAttribute" /> class.
+            /// Initializes a new instance of the <see cref="AttachComponentToFieldAttribute"/> class.
             /// </summary>
             /// <param name="componentType">Type of the component.</param>
             /// <param name="fieldName">Name of the field.</param>
@@ -451,32 +349,26 @@
             /// <summary>
             /// Gets the type of the component.
             /// </summary>
-            /// <value>
-            /// The type of the component.
-            /// </value>
+            /// <value>The type of the component.</value>
             public Type ComponentType { get; private set; }
 
             /// <summary>
             /// Gets the name of the field.
             /// </summary>
-            /// <value>
-            /// The name of the field.
-            /// </value>
+            /// <value>The name of the field.</value>
             public string FieldName { get; private set; }
 
             /// <summary>
             /// Gets a value indicating whether [start enabled].
             /// </summary>
-            /// <value>
-            ///   <c>true</c> if [start enabled]; otherwise, <c>false</c>.
-            /// </value>
+            /// <value><c>true</c> if [start enabled]; otherwise, <c>false</c>.</value>
             public bool StartEnabled { get; private set; }
         }
 
         /// <summary>
         /// Attribute for tagging a game object.
         /// </summary>
-        /// <seealso cref="System.Attribute" />
+        /// <seealso cref="System.Attribute"/>
         [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
         public sealed class TagGameObject : Attribute {
 
@@ -491,9 +383,7 @@
             /// <summary>
             /// Gets the tag.
             /// </summary>
-            /// <value>
-            /// The tag.
-            /// </value>
+            /// <value>The tag.</value>
             public string Tag { get; private set; }
         }
     }

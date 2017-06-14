@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using UnityEngine;
 
@@ -37,9 +37,7 @@
         /// <summary>
         /// Gets or sets the pixels per unit.
         /// </summary>
-        /// <value>
-        /// The pixels per unit.
-        /// </value>
+        /// <value>The pixels per unit.</value>
         public float PixelsPerUnit {
             get {
                 return this._pixelsPerUnit;
@@ -70,7 +68,7 @@
         /// <summary>
         /// The awake call.
         /// </summary>
-        protected void Awake() {
+        protected override void Awake() {
             if (this._pixelsPerUnit <= 0f) {
                 this.enabled = false;
             }
@@ -101,19 +99,19 @@
         /// <returns></returns>
         private Vector2 GetPixelPosition() {
             return new Vector2(
-                Mathf.Round(_actualPosition.x * this._pixelsPerUnit) * this._unitsPerPixel,
-                Mathf.Round(_actualPosition.y * this._pixelsPerUnit) * this._unitsPerPixel);
+                Mathf.Round(this._actualPosition.x * this._pixelsPerUnit) * this._unitsPerPixel,
+                Mathf.Round(this._actualPosition.y * this._pixelsPerUnit) * this._unitsPerPixel);
         }
 
         /// <summary>
         /// Performs the actual snapping.
         /// </summary>
         private void SnapToPixelLocation() {
-            var newPosition = this.Position2D;
+            var newPosition = this.Position;
             var differenceVector = newPosition - this._pixelPosition;
             this._actualPosition += differenceVector;
             this._pixelPosition = this.GetPixelPosition();
-            this.Position2D = this._pixelPosition;
+            this.Position = this._pixelPosition;
         }
     }
 }

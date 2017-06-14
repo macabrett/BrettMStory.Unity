@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using UnityEngine;
 
@@ -68,10 +68,12 @@
             var timeDifference = Time.time - this._startTime;
 
             if (yDifference > SimpleMobile.Instance.MinimumScreenHeightSwipeDistance && yDifference >= xDifference) {
-                if (end.y > start.y)
+                if (end.y > start.y) {
                     return TouchType.Up;
-                else
+                }
+                else {
                     return TouchType.Down;
+                }
             }
             else if (xDifference > SimpleMobile.Instance.MinimumScreenWidthSwipeDistance && xDifference > yDifference) {
                 if (end.x > start.x) {

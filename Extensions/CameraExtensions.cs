@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using UnityEngine;
 

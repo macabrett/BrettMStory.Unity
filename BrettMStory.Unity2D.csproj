@@ -7,8 +7,8 @@
     <ProjectGuid>{F64ED9E3-A688-47CE-BDA0-0D04D0282244}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BrettMStory.Unity</RootNamespace>
-    <AssemblyName>BrettMStory.Unity</AssemblyName>
+    <RootNamespace>BrettMStory.Unity2D</RootNamespace>
+    <AssemblyName>BrettMStory.Unity2D</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\BrettMStory.Unity.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\BrettMStory.Unity2D.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\BrettMStory.Unity.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\BrettMStory.Unity2D.xml</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <ItemGroup>
@@ -44,7 +44,7 @@
     <Compile Include="BaseBehaviour.cs" />
     <Compile Include="Camera\CameraSettings.cs" />
     <Compile Include="Camera\ScreenSizeChangedEventArgs.cs" />
-    <Compile Include="Camera\HorizontalCamera2D.cs" />
+    <Compile Include="Camera\HorizontalCamera.cs" />
     <Compile Include="Extensions\ActionExtensions.cs" />
     <Compile Include="Extensions\CameraExtensions.cs" />
     <Compile Include="Extensions\ColliderExtensions.cs" />

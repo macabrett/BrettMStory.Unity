@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     /// <summary>
     /// Represents a margin. Usually for cameras.
@@ -45,49 +45,37 @@
         /// <summary>
         /// Gets the zero.
         /// </summary>
-        /// <value>
-        /// The zero.
-        /// </value>
+        /// <value>The zero.</value>
         public static Margin Zero { get { return new Margin(0f); } }
 
         /// <summary>
         /// Gets or sets the bottom.
         /// </summary>
-        /// <value>
-        /// The bottom.
-        /// </value>
+        /// <value>The bottom.</value>
         public float Bottom { get; private set; }
 
         /// <summary>
         /// Gets the left.
         /// </summary>
-        /// <value>
-        /// The left.
-        /// </value>
+        /// <value>The left.</value>
         public float Left { get; private set; }
 
         /// <summary>
         /// Gets the right.
         /// </summary>
-        /// <value>
-        /// The right.
-        /// </value>
+        /// <value>The right.</value>
         public float Right { get; private set; }
 
         /// <summary>
         /// Gets or sets the top.
         /// </summary>
-        /// <value>
-        /// The top.
-        /// </value>
+        /// <value>The top.</value>
         public float Top { get; private set; }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="System.String"/> that represents this instance.
         /// </summary>
-        /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
-        /// </returns>
+        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
         public override string ToString() {
             return string.Format("Margin: (Top: {0}, Right: {1}, Bottom: {2}, Left: {3})", this.Top, this.Right, this.Bottom, this.Left);
         }

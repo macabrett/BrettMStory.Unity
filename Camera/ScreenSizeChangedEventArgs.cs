@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using System;
     using UnityEngine;
@@ -6,7 +6,7 @@
     /// <summary>
     /// Event args for camera adjusted.
     /// </summary>
-    public class ScreenSizeChangedEventArgs : EventArgs {
+    public sealed class ScreenSizeChangedEventArgs : EventArgs {
 
         /// <summary>
         /// Initializes a new instance of ScreenSizeChangedEventArgs.

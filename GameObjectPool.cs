@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using System;
     using System.Collections.Generic;
@@ -52,8 +52,12 @@
         /// </summary>
         /// <param name="prefab">The prefab to instantiate game objects.</param>
         /// <param name="startingSize">The starting size.</param>
-        /// <param name="getFunction">A function to be called on a game object when it is gotten from the pool.</param>
-        /// <param name="releaseFunction">A function to be called on a game object when it is released back to the pool.</param>
+        /// <param name="getFunction">
+        /// A function to be called on a game object when it is gotten from the pool.
+        /// </param>
+        /// <param name="releaseFunction">
+        /// A function to be called on a game object when it is released back to the pool.
+        /// </param>
         public GameObjectPool(GameObject prefab, int startingSize, Action<T> getFunction, Action<T> releaseFunction)
             : this(prefab, startingSize) {
             this._onGet = getFunction;
@@ -123,7 +127,7 @@
         /// </summary>
         /// <param name="number"></param>
         private void Preload(int number) {
-            for (int i = 0; i < number; i++) {
+            for (var i = 0; i < number; i++) {
                 this.ReleaseObject(this.Instantiate());
             }
         }
@@ -171,8 +175,12 @@
         /// </summary>
         /// <param name="prefab">The prefab to instantiate game objects.</param>
         /// <param name="startingSize">The starting size.</param>
-        /// <param name="getFunction">A function to be called on a game object when it is gotten from the pool.</param>
-        /// <param name="releaseFunction">A function to be called on a game object when it is released back to the pool.</param>
+        /// <param name="getFunction">
+        /// A function to be called on a game object when it is gotten from the pool.
+        /// </param>
+        /// <param name="releaseFunction">
+        /// A function to be called on a game object when it is released back to the pool.
+        /// </param>
         public GameObjectPool(GameObject prefab, int startingSize, Action<GameObject> getFunction, Action<GameObject> releaseFunction)
             : this(prefab, startingSize) {
             this._onGet = getFunction;
@@ -242,7 +250,7 @@
         /// </summary>
         /// <param name="number"></param>
         private void Preload(int number) {
-            for (int i = 0; i < number; i++) {
+            for (var i = 0; i < number; i++) {
                 this.ReleaseObject(this.Instantiate());
             }
         }

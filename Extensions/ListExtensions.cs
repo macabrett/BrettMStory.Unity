@@ -31,8 +31,8 @@
             var random = new Random();
             var i = newList.Count - 1;
             while (i > 1) {
-                int j = random.Next(i + 1);
-                T value = list[j];
+                var j = random.Next(i + 1);
+                var value = list[j];
                 list[j] = list[i];
                 list[i] = value;
                 i--;
@@ -42,14 +42,16 @@
         }
 
         /// <summary>
-        /// Gets a random item out of the list. If the list has one or zero elements, it acts exactly the same as FirstOrDefault.
+        /// Gets a random item out of the list. If the list has one or zero elements, it acts exactly
+        /// the same as FirstOrDefault.
         /// </summary>
         /// <typeparam name="T">The type.</typeparam>
         /// <param name="list">The list.</param>
         /// <returns>A random item out of the list.</returns>
         public static T RandomOrDefault<T>(this IList<T> list) {
-            if (list.Count <= 1)
+            if (list.Count <= 1) {
                 return list.FirstOrDefault();
+            }
 
             return list.Random();
         }

@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using System;
     using System.Collections;
@@ -10,8 +10,20 @@
     /// The screen position enum.
     /// </summary>
     public enum ScreenPosition {
+
+        /// <summary>
+        /// Will anchor the screen on the left side.
+        /// </summary>
         Left,
+
+        /// <summary>
+        /// Will anchor the screen on the right side.
+        /// </summary>
         Right,
+
+        /// <summary>
+        /// Will anchor the screen in the center.
+        /// </summary>
         Center
     }
 
@@ -19,7 +31,7 @@
     /// A camera which follows a target.
     /// </summary>
     [RequireComponent(typeof(Camera))]
-    public class HorizontalCamera2D : BaseBehaviour {
+    public sealed class HorizontalCamera : BaseBehaviour {
 
         /// <summary>
         /// The screen position.
@@ -120,7 +132,7 @@
         /// </summary>
         public Vector2 BottomLeftCorner {
             get {
-                return new Vector2(this.Position2D.x - this._halfWorldWidth, this.Position2D.y - this._halfWorldHeight);
+                return new Vector2(this.Position.x - this._halfWorldWidth, this.Position.y - this._halfWorldHeight);
             }
         }
 
@@ -129,7 +141,7 @@
         /// </summary>
         public Vector2 BottomRightCorner {
             get {
-                return new Vector2(this.Position2D.x + this._halfWorldWidth, this.Position2D.y - this._halfWorldHeight);
+                return new Vector2(this.Position.x + this._halfWorldWidth, this.Position.y - this._halfWorldHeight);
             }
         }
 
@@ -152,7 +164,7 @@
         /// </summary>
         public Vector2 TopLeftCorner {
             get {
-                return new Vector2(this.Position2D.x - this._halfWorldWidth, this.Position2D.y + this._halfWorldHeight);
+                return new Vector2(this.Position.x - this._halfWorldWidth, this.Position.y + this._halfWorldHeight);
             }
         }
 
@@ -161,14 +173,14 @@
         /// </summary>
         public Vector2 TopRightCorner {
             get {
-                return new Vector2(this.Position2D.x + this._halfWorldWidth, this.Position2D.y + this._halfWorldHeight);
+                return new Vector2(this.Position.x + this._halfWorldWidth, this.Position.y + this._halfWorldHeight);
             }
         }
 
         /// <summary>
         /// Awakes this instance.
         /// </summary>
-        protected virtual void Awake() {
+        protected override void Awake() {
             this._camera = this.GetComponent<Camera>();
             this.StartCoroutine(this.CheckScreenSizeChanged());
 
@@ -177,15 +189,8 @@
             this._followTargetActions.Add(ScreenPosition.Left, this.GetLeftFollowAction());
             this._followTargetActions.Add(ScreenPosition.Right, this.GetRightFollowAction());
             this._followTargetActions.Add(ScreenPosition.Center, this.GetCenterFollowAction());
-        }
 
-        /// <summary>
-        /// Updates this instance.
-        /// </summary>
-        protected virtual void Update() {
-            if (this._followTargetActions.ContainsKey(this._anchorPoint)) {
-                this._followTargetActions[this._anchorPoint]();
-            }
+            base.Awake();
         }
 
         /// <summary>
@@ -236,7 +241,7 @@
         /// <returns>The follow action for a center anchor point.</returns>
         private Action GetCenterFollowAction() {
             return () => {
-                this.Position2D = Vector2.Lerp(this.Position2D, new Vector2(this._target.position.x, this.Position2D.y) + this._targetOffset, this._lerpAmount * Time.deltaTime);
+                this.Position = Vector2.Lerp(this.Position, new Vector2(this._target.position.x, this.Position.y) + this._targetOffset, this._lerpAmount * Time.deltaTime);
             };
         }
 
@@ -247,7 +252,7 @@
         private Action GetLeftFollowAction() {
             return () => {
                 var xPosition = this._target.position.x + this._halfWorldWidth + this._targetOffset.x;
-                this.Position2D = Vector2.Lerp(this.Position2D, new Vector2(xPosition, this.Position2D.y), this._lerpAmount * Time.deltaTime);
+                this.Position = Vector2.Lerp(this.Position, new Vector2(xPosition, this.Position.y), this._lerpAmount * Time.deltaTime);
             };
         }
 
@@ -258,7 +263,7 @@
         private Action GetRightFollowAction() {
             return () => {
                 var xPosition = this._target.position.x - this._halfWorldWidth + this._targetOffset.x;
-                this.Position2D = Vector2.Lerp(this.Position2D, new Vector2(xPosition, this.Position2D.y), this._lerpAmount * Time.deltaTime);
+                this.Position = Vector2.Lerp(this.Position, new Vector2(xPosition, this.Position.y), this._lerpAmount * Time.deltaTime);
             };
         }
 
@@ -267,7 +272,16 @@
         /// </summary>
         private void SetInitialYPosition() {
             var yPosition = this._target.position.y + this._halfWorldHeight + this._targetOffset.y;
-            this.Position2D = new Vector2(this.Position2D.x, yPosition);
+            this.Position = new Vector2(this.Position.x, yPosition);
+        }
+
+        /// <summary>
+        /// Updates this instance.
+        /// </summary>
+        private void Update() {
+            if (this._followTargetActions.ContainsKey(this._anchorPoint)) {
+                this._followTargetActions[this._anchorPoint]();
+            }
         }
     }
 }

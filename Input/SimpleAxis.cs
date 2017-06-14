@@ -1,7 +1,6 @@
 ﻿namespace BrettMStory.Unity {
 
     using System;
-
     using UnityEngine;
 
     /// <summary>

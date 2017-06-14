@@ -15,8 +15,7 @@
         /// <param name="sender">The sender.</param>
         /// <param name="e">The event args.</param>
         public static void SafeInvoke<T>(this EventHandler<T> eventHandler, object sender, T e) where T : EventArgs {
-            if (eventHandler != null)
-                eventHandler(sender, e);
+            eventHandler?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -25,9 +24,7 @@
         /// <param name="eventHandler">The event handler.</param>
         /// <param name="sender">The sender.</param>
         public static void SafeInvoke(this EventHandler eventHandler, object sender) {
-            if (eventHandler != null) {
-                eventHandler(sender, null);
-            }
+            eventHandler?.Invoke(sender, null);
         }
     }
 }

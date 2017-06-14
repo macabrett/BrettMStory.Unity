@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using System;
 
@@ -12,9 +12,7 @@
         /// </summary>
         /// <param name="action">The action.</param>
         public static void SafeInvoke(this Action action) {
-            if (action != null) {
-                action();
-            }
+            action?.Invoke();
         }
 
         /// <summary>
@@ -24,9 +22,7 @@
         /// <param name="action">The action.</param>
         /// <param name="parameter">The parameter.</param>
         public static void SafeInvoke<T>(this Action<T> action, T parameter) {
-            if (action != null) {
-                action(parameter);
-            }
+            action?.Invoke(parameter);
         }
     }
 }

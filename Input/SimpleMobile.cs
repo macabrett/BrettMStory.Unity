@@ -1,8 +1,7 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using System;
     using System.Collections.Generic;
-
     using UnityEngine;
 
     /// <summary>
@@ -106,12 +105,14 @@
         }
 
         /// <summary>
-        /// Gets the minimum percentage of the screen height that a touch must traverse to be considered a swipe.
+        /// Gets the minimum percentage of the screen height that a touch must traverse to be
+        /// considered a swipe.
         /// </summary>
         internal float MinimumScreenHeightSwipeDistance { get; private set; }
 
         /// <summary>
-        /// Gets the minimum percentage of the screen width that a touch must traverse to be considered a swipe.
+        /// Gets the minimum percentage of the screen width that a touch must traverse to be
+        /// considered a swipe.
         /// </summary>
         internal float MinimumScreenWidthSwipeDistance { get; private set; }
 
@@ -128,7 +129,7 @@
         /// The update.
         /// </summary>
         protected void Update() {
-            for (int i = 0; i < Input.touchCount; i++) {
+            for (var i = 0; i < Input.touchCount; i++) {
                 var touch = Input.GetTouch(i);
                 if (touch.phase == TouchPhase.Began) {
                     this.HandleTouchBegan(touch);
@@ -144,8 +145,10 @@
         /// </summary>
         /// <param name="touch">A UnityEngine touch.</param>
         private void HandleTouchBegan(Touch touch) {
-            if (!this._inputData.ContainsKey(touch.fingerId))
+            if (!this._inputData.ContainsKey(touch.fingerId)) {
                 this._inputData.Add(touch.fingerId, new TouchData());
+            }
+
             this._inputData[touch.fingerId].Begin(touch);
 
             this.BeganTouch.SafeInvoke(this, new TouchEventArgs(touch));
@@ -156,8 +159,9 @@
         /// </summary>
         /// <param name="touch">A UnityEngine touch.</param>
         private void HandleTouchEnd(Touch touch) {
-            if (!this._inputData.ContainsKey(touch.fingerId))
+            if (!this._inputData.ContainsKey(touch.fingerId)) {
                 return;
+            }
 
             var touchEventArgs = new TouchEventArgs(touch);
             this.EndedTouch.SafeInvoke(this, touchEventArgs);

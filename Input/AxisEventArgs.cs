@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using System;
 
@@ -18,7 +18,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the axis value (-1.0f > value > 1.0f).
+        /// Gets or sets the axis value (-1.0f &gt; value &gt; 1.0f).
         /// </summary>
         public float AxisValue { get; set; }
 
