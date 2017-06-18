@@ -33,79 +33,31 @@
     [RequireComponent(typeof(Camera))]
     public sealed class HorizontalCamera : BaseBehaviour {
 
-        /// <summary>
-        /// The screen position.
-        /// </summary>
         [SerializeField]
         private ScreenPosition _anchorPoint;
 
-        /// <summary>
-        /// The camera.
-        /// </summary>
         private Camera _camera;
-
-        /// <summary>
-        /// Delegate action to follow target.
-        /// </summary>
         private Dictionary<ScreenPosition, Action> _followTargetActions = new Dictionary<ScreenPosition, Action>();
-
-        /// <summary>
-        /// Half of the world height.
-        /// </summary>
         private float _halfWorldHeight;
-
-        /// <summary>
-        /// Half of the world width.
-        /// </summary>
         private float _halfWorldWidth;
 
-        /// <summary>
-        /// The lerp amount.
-        /// </summary>
         [SerializeField]
         private float _lerpAmount;
 
-        /// <summary>
-        /// The minimum world height.
-        /// </summary>
         [SerializeField]
         private float _minimumWorldHeight;
 
-        /// <summary>
-        /// The minimum world width.
-        /// </summary>
         [SerializeField]
         private float _minimumWorldWidth;
 
-        /// <summary>
-        /// The screen height.
-        /// </summary>
         private int _screenHeight;
-
-        /// <summary>
-        /// The screen width.
-        /// </summary>
         private int _screenWidth;
-
-        /// <summary>
-        /// The screen height in world units.
-        /// </summary>
         private float _screenWorldHeight;
-
-        /// <summary>
-        /// The screen width in world units.
-        /// </summary>
         private float _screenWorldWidth;
 
-        /// <summary>
-        /// The target to follow.
-        /// </summary>
         [SerializeField]
         private Transform _target;
 
-        /// <summary>
-        /// The offset from the target.
-        /// </summary>
         [SerializeField]
         private Vector2 _targetOffset;
 
@@ -193,9 +145,6 @@
             base.Awake();
         }
 
-        /// <summary>
-        /// Adjusts the camera to a new resolution.
-        /// </summary>
         private void Adjust() {
             this._camera.orthographicSize = this._minimumWorldHeight * 0.5f;
             var worldWidth = this._camera.ScreenToWorldPoint(new Vector2(Screen.width, 0f)).x - this._camera.ScreenToWorldPoint(Vector2.zero).x;
@@ -221,10 +170,6 @@
             this.SetInitialYPosition();
         }
 
-        /// <summary>
-        /// Checks if the screen size has changed.
-        /// </summary>
-        /// <returns>An enumerator.</returns>
         private IEnumerator CheckScreenSizeChanged() {
             while (true) {
                 if (Screen.width != this._screenWidth || Screen.height != this._screenHeight) {
@@ -235,20 +180,12 @@
             }
         }
 
-        /// <summary>
-        /// Gets the follow action for a center anchor point.
-        /// </summary>
-        /// <returns>The follow action for a center anchor point.</returns>
         private Action GetCenterFollowAction() {
             return () => {
                 this.Position = Vector2.Lerp(this.Position, new Vector2(this._target.position.x, this.Position.y) + this._targetOffset, this._lerpAmount * Time.deltaTime);
             };
         }
 
-        /// <summary>
-        /// Gets the follow action for a left anchor point.
-        /// </summary>
-        /// <returns>The follow action for a left anchor point.</returns>
         private Action GetLeftFollowAction() {
             return () => {
                 var xPosition = this._target.position.x + this._halfWorldWidth + this._targetOffset.x;
@@ -256,10 +193,6 @@
             };
         }
 
-        /// <summary>
-        /// Gets the follow action for a right anchor point.
-        /// </summary>
-        /// <returns>The follow action for a right anchor point.</returns>
         private Action GetRightFollowAction() {
             return () => {
                 var xPosition = this._target.position.x - this._halfWorldWidth + this._targetOffset.x;
@@ -267,17 +200,11 @@
             };
         }
 
-        /// <summary>
-        /// Sets the initial Y position.
-        /// </summary>
         private void SetInitialYPosition() {
             var yPosition = this._target.position.y + this._halfWorldHeight + this._targetOffset.y;
             this.Position = new Vector2(this.Position.x, yPosition);
         }
 
-        /// <summary>
-        /// Updates this instance.
-        /// </summary>
         private void Update() {
             if (this._followTargetActions.ContainsKey(this._anchorPoint)) {
                 this._followTargetActions[this._anchorPoint]();

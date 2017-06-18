@@ -41,6 +41,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\AttachComponentAttribute.cs" />
+    <Compile Include="Attributes\AttachComponentToFieldAttribute.cs" />
     <Compile Include="BaseBehaviour.cs" />
     <Compile Include="Camera\CameraSettings.cs" />
     <Compile Include="Camera\ScreenSizeChangedEventArgs.cs" />
@@ -48,6 +50,7 @@
     <Compile Include="Extensions\ActionExtensions.cs" />
     <Compile Include="Extensions\CameraExtensions.cs" />
     <Compile Include="Extensions\ColliderExtensions.cs" />
+    <Compile Include="Extensions\ComponentExtensions.cs" />
     <Compile Include="Extensions\EventHandlerExtensions.cs" />
     <Compile Include="Extensions\IntegerExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />

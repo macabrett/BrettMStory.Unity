@@ -9,25 +9,9 @@
     /// </summary>
     /// <typeparam name="T">The monobehaviour to return.</typeparam>
     public class GameObjectPool<T> where T : MonoBehaviour {
-
-        /// <summary>
-        /// Called [on get].
-        /// </summary>
         private readonly Action<T> _onGet;
-
-        /// <summary>
-        /// Called [on release].
-        /// </summary>
         private readonly Action<T> _onRelease;
-
-        /// <summary>
-        /// The prefab to instantiate based on.
-        /// </summary>
         private readonly GameObject _prefab;
-
-        /// <summary>
-        /// The stack to pull behaviours from.
-        /// </summary>
         private readonly Stack<T> _stack = new Stack<T>();
 
         /// <summary>
@@ -43,8 +27,8 @@
             }
 
             this._prefab = prefab;
-            this._onGet = this.DefaultOnGet;
-            this._onRelease = this.DefaultOnRelease;
+            this._onGet = GameObjectPool<T>.DefaultOnGet;
+            this._onRelease = GameObjectPool<T>.DefaultOnRelease;
         }
 
         /// <summary>
@@ -97,35 +81,19 @@
             this._stack.Push(poolBehaviour);
         }
 
-        /// <summary>
-        /// The default method to be called when getting a pool object.
-        /// </summary>
-        /// <param name="poolBehaviour">The pool behaviour.</param>
-        private void DefaultOnGet(T poolBehaviour) {
+        private static void DefaultOnGet(T poolBehaviour) {
             poolBehaviour.gameObject.SetActive(true);
         }
 
-        /// <summary>
-        /// The default method to be called when getting a pool object.
-        /// </summary>
-        /// <param name="poolBehaviour">The pool behaviour.</param>
-        private void DefaultOnRelease(T poolBehaviour) {
+        private static void DefaultOnRelease(T poolBehaviour) {
             poolBehaviour.gameObject.SetActive(false);
         }
 
-        /// <summary>
-        /// Instantiates a new game object.
-        /// </summary>
-        /// <returns>The instantiated game object.</returns>
         private T Instantiate() {
             var poolObject = GameObject.Instantiate(this._prefab) as GameObject;
             return poolObject.GetComponent<T>();
         }
 
-        /// <summary>
-        /// Preloads
-        /// </summary>
-        /// <param name="number"></param>
         private void Preload(int number) {
             for (var i = 0; i < number; i++) {
                 this.ReleaseObject(this.Instantiate());
@@ -137,25 +105,9 @@
     /// A pool of game objects.
     /// </summary>
     public class GameObjectPool {
-
-        /// <summary>
-        /// Called [on get].
-        /// </summary>
         private readonly Action<GameObject> _onGet;
-
-        /// <summary>
-        /// Called [on release].
-        /// </summary>
         private readonly Action<GameObject> _onRelease;
-
-        /// <summary>
-        /// The prefab to pull from the pool.
-        /// </summary>
         private readonly GameObject _prefab;
-
-        /// <summary>
-        /// The stack to pull objects from.
-        /// </summary>
         private readonly Stack<GameObject> _stack = new Stack<GameObject>();
 
         /// <summary>
@@ -166,8 +118,8 @@
         public GameObjectPool(GameObject prefab, int startingSize) {
             this._prefab = prefab;
             this.Preload(startingSize);
-            this._onGet = this.DefaultOnGet;
-            this._onRelease = this.DefaultOnRelease;
+            this._onGet = GameObjectPool.DefaultOnGet;
+            this._onRelease = GameObjectPool.DefaultOnRelease;
         }
 
         /// <summary>
@@ -220,35 +172,19 @@
             this._stack.Push(poolObject);
         }
 
-        /// <summary>
-        /// The default method to be called when getting a pool object.
-        /// </summary>
-        /// <param name="poolObject">The pool object.</param>
-        private void DefaultOnGet(GameObject poolObject) {
+        private static void DefaultOnGet(GameObject poolObject) {
             poolObject.SetActive(true);
         }
 
-        /// <summary>
-        /// The default method to be called when getting a pool object.
-        /// </summary>
-        /// <param name="poolObject">The pool object.</param>
-        private void DefaultOnRelease(GameObject poolObject) {
+        private static void DefaultOnRelease(GameObject poolObject) {
             poolObject.SetActive(false);
         }
 
-        /// <summary>
-        /// Instantiates a new game object.
-        /// </summary>
-        /// <returns>The instantiated game object.</returns>
         private GameObject Instantiate() {
             var poolObject = GameObject.Instantiate(this._prefab) as GameObject;
             return poolObject;
         }
 
-        /// <summary>
-        /// Preloads
-        /// </summary>
-        /// <param name="number"></param>
         private void Preload(int number) {
             for (var i = 0; i < number; i++) {
                 this.ReleaseObject(this.Instantiate());

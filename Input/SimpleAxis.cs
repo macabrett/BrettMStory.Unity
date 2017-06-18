@@ -1,4 +1,4 @@
-﻿namespace BrettMStory.Unity {
+﻿namespace BrettMStory.Unity2D {
 
     using System;
     using UnityEngine;
@@ -7,30 +7,10 @@
     /// A class which handles simple axis input (up, down, left, right)
     /// </summary>
     public class SimpleAxis : MonoBehaviour {
-
-        /// <summary>
-        /// An instance of SimpleAxis.
-        /// </summary>
         private static SimpleAxis _instance;
-
-        /// <summary>
-        /// A value indicating whether or not down has been pressed.
-        /// </summary>
         private bool _isDownPressed = false;
-
-        /// <summary>
-        /// A value indicating whether or not left has been pressed.
-        /// </summary>
         private bool _isLeftPressed = false;
-
-        /// <summary>
-        /// A value indicating whether or not right has been pressed.
-        /// </summary>
         private bool _isRightPressed = false;
-
-        /// <summary>
-        /// A value indicating whether or not up has been pressed.
-        /// </summary>
         private bool _isUpPressed = false;
 
         /// <summary>
@@ -116,26 +96,12 @@
             }
         }
 
-        /// <summary>
-        /// The awake call.
-        /// </summary>
-        protected void Awake() {
+        private void Awake() {
             if (SimpleAxis._instance == null) {
                 SimpleAxis._instance = this;
             }
         }
 
-        /// <summary>
-        /// The update call.
-        /// </summary>
-        protected void Update() {
-            this.HandleHorizontal();
-            this.HandleVertical();
-        }
-
-        /// <summary>
-        /// Handles horizontal input.
-        /// </summary>
         private void HandleHorizontal() {
             var x = Input.GetAxis("Horizontal");
             var xRaw = Input.GetAxisRaw("Horizontal");
@@ -169,9 +135,6 @@
             }
         }
 
-        /// <summary>
-        /// Handles vertical input.
-        /// </summary>
         private void HandleVertical() {
             var y = Input.GetAxis("Vertical");
             var yRaw = Input.GetAxisRaw("Vertical");
@@ -203,6 +166,11 @@
                 this._isDownPressed = false;
                 this.DownReleased.SafeInvoke(this, new AxisEventArgs(y, yRaw));
             }
+        }
+
+        private void Update() {
+            this.HandleHorizontal();
+            this.HandleVertical();
         }
     }
 }

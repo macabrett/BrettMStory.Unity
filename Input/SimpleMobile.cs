@@ -8,32 +8,15 @@
     /// Input controller.
     /// </summary>
     public class SimpleMobile : MonoBehaviour {
-
-        /// <summary>
-        /// The singleton instance of InputController;
-        /// </summary>
         private static SimpleMobile _instance;
-
-        /// <summary>
-        /// The input data.
-        /// </summary>
         private readonly Dictionary<int, TouchData> _inputData = new Dictionary<int, TouchData>();
 
-        /// <summary>
-        /// The maximum time for a touch to still be considered a tap.
-        /// </summary>
         [SerializeField]
         private float _maximumTapTime = 0.5f;
 
-        /// <summary>
-        /// The minimum percentage of the screen height that a touch must traverse to be considered a swipe.
-        /// </summary>
         [SerializeField]
         private float _minimumScreenHeightSwipePercentage = 0.1f;
 
-        /// <summary>
-        /// The minimum percentage of the screen width that a touch must traverse to be considered a swipe.
-        /// </summary>
         [SerializeField]
         private float _minimumScreenWidthSwipePercentage = 0.1f;
 
@@ -116,34 +99,12 @@
         /// </summary>
         internal float MinimumScreenWidthSwipeDistance { get; private set; }
 
-        /// <summary>
-        /// The awake call.
-        /// </summary>
-        protected virtual void Awake() {
+        private void Awake() {
             SimpleMobile._instance = this;
             this.MinimumScreenHeightSwipeDistance = Screen.height * this._minimumScreenHeightSwipePercentage;
             this.MinimumScreenWidthSwipeDistance = Screen.width * this._minimumScreenWidthSwipePercentage;
         }
 
-        /// <summary>
-        /// The update.
-        /// </summary>
-        protected void Update() {
-            for (var i = 0; i < Input.touchCount; i++) {
-                var touch = Input.GetTouch(i);
-                if (touch.phase == TouchPhase.Began) {
-                    this.HandleTouchBegan(touch);
-                }
-                else if (touch.phase == TouchPhase.Ended) {
-                    this.HandleTouchEnd(touch);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handles a touch beginning.
-        /// </summary>
-        /// <param name="touch">A UnityEngine touch.</param>
         private void HandleTouchBegan(Touch touch) {
             if (!this._inputData.ContainsKey(touch.fingerId)) {
                 this._inputData.Add(touch.fingerId, new TouchData());
@@ -154,10 +115,6 @@
             this.BeganTouch.SafeInvoke(this, new TouchEventArgs(touch));
         }
 
-        /// <summary>
-        /// Handles a touch ending.
-        /// </summary>
-        /// <param name="touch">A UnityEngine touch.</param>
         private void HandleTouchEnd(Touch touch) {
             if (!this._inputData.ContainsKey(touch.fingerId)) {
                 return;
@@ -189,6 +146,18 @@
                 case TouchType.Tap:
                     Tap.SafeInvoke(this, touchEventArgs);
                     break;
+            }
+        }
+
+        private void Update() {
+            for (var i = 0; i < Input.touchCount; i++) {
+                var touch = Input.GetTouch(i);
+                if (touch.phase == TouchPhase.Began) {
+                    this.HandleTouchBegan(touch);
+                }
+                else if (touch.phase == TouchPhase.Ended) {
+                    this.HandleTouchEnd(touch);
+                }
             }
         }
     }

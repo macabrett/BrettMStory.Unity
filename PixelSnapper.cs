@@ -6,32 +6,15 @@
     /// Snaps pixels!
     /// </summary>
     public class PixelSnapper : BaseBehaviour {
-
-        /// <summary>
-        /// The transform's actual position.
-        /// </summary>
         private Vector2 _actualPosition;
-
-        /// <summary>
-        /// The transform's pixel position.
-        /// </summary>
         private Vector2 _pixelPosition;
 
-        /// <summary>
-        /// The number of pixels per unity unit.
-        /// </summary>
         [SerializeField]
         private float _pixelsPerUnit = 1f;
 
-        /// <summary>
-        /// A value indicating whether or not this should snap on update.
-        /// </summary>
         [SerializeField]
         private bool _snapOnUpdate = true;
 
-        /// <summary>
-        /// The number of units per pixel (used for faster calculations).
-        /// </summary>
         private float _unitsPerPixel;
 
         /// <summary>
@@ -82,10 +65,13 @@
             }
         }
 
-        /// <summary>
-        /// The late update call.
-        /// </summary>
-        protected void LateUpdate() {
+        private Vector2 GetPixelPosition() {
+            return new Vector2(
+                Mathf.Round(this._actualPosition.x * this._pixelsPerUnit) * this._unitsPerPixel,
+                Mathf.Round(this._actualPosition.y * this._pixelsPerUnit) * this._unitsPerPixel);
+        }
+
+        private void LateUpdate() {
             if (!this._snapOnUpdate) {
                 return;
             }
@@ -93,19 +79,6 @@
             this.SnapToPixelLocation();
         }
 
-        /// <summary>
-        /// Gets pixel position from actual position.
-        /// </summary>
-        /// <returns></returns>
-        private Vector2 GetPixelPosition() {
-            return new Vector2(
-                Mathf.Round(this._actualPosition.x * this._pixelsPerUnit) * this._unitsPerPixel,
-                Mathf.Round(this._actualPosition.y * this._pixelsPerUnit) * this._unitsPerPixel);
-        }
-
-        /// <summary>
-        /// Performs the actual snapping.
-        /// </summary>
         private void SnapToPixelLocation() {
             var newPosition = this.Position;
             var differenceVector = newPosition - this._pixelPosition;

@@ -18,15 +18,7 @@
     /// Touch data.
     /// </summary>
     internal class TouchData {
-
-        /// <summary>
-        /// The screen position that the touch starts.
-        /// </summary>
         private Vector2 _startPosition;
-
-        /// <summary>
-        /// The time when the touch starts.
-        /// </summary>
         private float _startTime;
 
         /// <summary>

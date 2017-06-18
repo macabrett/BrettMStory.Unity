@@ -7,10 +7,6 @@
     /// A class which handles simple mouse input (button presses).
     /// </summary>
     public class SimpleMouse : MonoBehaviour {
-
-        /// <summary>
-        /// An instance of SimpleMouse.
-        /// </summary>
         private static SimpleMouse _instance;
 
         /// <summary>
@@ -51,10 +47,7 @@
             }
         }
 
-        /// <summary>
-        /// The update call.
-        /// </summary>
-        protected void Update() {
+        private void Update() {
             if (Input.GetMouseButtonDown(0)) {
                 this.LeftMouseButtonDown.SafeInvoke(this, new MouseInputEventArgs(Input.mousePosition));
             }
