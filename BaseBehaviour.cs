@@ -6,6 +6,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using UnityEngine;
 
     /// <summary>
@@ -125,8 +126,7 @@
         /// Awakes this instance.
         /// </summary>
         protected virtual void Awake() {
-            this.HandleAttachComponentAttributes();
-            this.HandleAttachComponentToFieldAttributes();
+            this.AttachComponents();
         }
 
         /// <summary>
@@ -144,81 +144,48 @@
             }
         }
 
+        private void AttachComponents() {
+            var type = this.GetType();
+            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Default | BindingFlags.DeclaredOnly;
+            var properties = type.GetProperties(flags);
+
+            foreach (var property in properties) {
+                if (property.CanWrite && property.PropertyType.IsSubclassOf(typeof(Component)) && property.GetSetMethod() != null && property.GetGetMethod() != null) {
+                    var attributes = property.GetCustomAttributes(typeof(AttachComponentAttribute), true);
+
+                    if (attributes.FirstOrDefault() is AttachComponentAttribute attachAttribute) {
+                        var component = this.GetOrAddComponent(property.PropertyType);
+                        property.SetValue(this, component, null);
+
+                        if (component is MonoBehaviour behaviour) {
+                            behaviour.enabled = attachAttribute.StartEnabled;
+                        }
+                    }
+                }
+            }
+
+            var fields = type.GetFields(flags);
+            foreach (var field in fields) {
+                if (field.FieldType.IsSubclassOf(typeof(Component))) {
+                    var attributes = field.GetCustomAttributes(typeof(AttachComponentAttribute), true);
+                    if (attributes.FirstOrDefault() is AttachComponentAttribute attachAttribute) {
+                        var component = this.GetOrAddComponent(field.FieldType);
+                        Debug.Log(component);
+                        field.SetValue(this, component);
+                        if (component is MonoBehaviour behaviour) {
+                            behaviour.enabled = attachAttribute.StartEnabled;
+                        }
+                    }
+                }
+            }
+        }
+
         private T GetAttribute<T>() where T : Attribute {
             return (T)Attribute.GetCustomAttribute(this.GetType(), typeof(T));
         }
 
         private IEnumerable<T> GetAttributes<T>() where T : Attribute {
             return Attribute.GetCustomAttributes(this.GetType(), typeof(T)).Cast<T>();
-        }
-
-        private void HandleAttachComponentAttributes() {
-            var attachAttributes = this.GetAttributes<AttachComponentAttribute>().ToArray();
-
-            for (var i = 0; i < attachAttributes.Length; i++) {
-                var attribute = attachAttributes[i];
-                if (!attribute.ComponentType.IsSubclassOf(typeof(Component))) {
-                    throw new NotSupportedException($"The AttachComponent attribute can only be used to attach Components. Type '{attribute.ComponentType.Name}' is not a Component.");
-                }
-
-                var component = this.GetOrAddComponent(attribute.ComponentType);
-
-                if (string.IsNullOrEmpty(attribute.PropertyName)) {
-                    return;
-                }
-
-                var propertyInfo = this.GetType().GetProperty(attribute.PropertyName);
-                if (propertyInfo == null) {
-                    throw new NotSupportedException($"The AttachComponent attribute could not assign to property with name '{attribute.PropertyName}' on class '{this.GetType().Name}', because it does not exist.");
-                }
-                else if (!propertyInfo.CanWrite) {
-                    throw new NotSupportedException($"The AttachComponent attribute could not assign to property with name '{attribute.PropertyName}' on class '{this.GetType().Name}', because it is a read only property.");
-                }
-                else if (propertyInfo.PropertyType != attribute.ComponentType) {
-                    throw new NotSupportedException($"The AttachComponent attribute could not assign to property with name '{attribute.PropertyName}' on class '{this.GetType().Name}', because the property is not of the same type.");
-                }
-
-                propertyInfo.SetValue(this, component, null);
-
-                if (component is MonoBehaviour behaviour) {
-                    behaviour.enabled = attribute.StartEnabled;
-                }
-            }
-        }
-
-        private void HandleAttachComponentToFieldAttributes() {
-            var attachAttributes = this.GetAttributes<AttachComponentToFieldAttribute>().ToArray();
-
-            for (var i = 0; i < attachAttributes.Length; i++) {
-                var attribute = attachAttributes[i];
-                if (!attribute.ComponentType.IsSubclassOf(typeof(Component))) {
-                    throw new NotSupportedException($"The AttachComponentToField attribute can only be used to attach Components. Type '{attribute.ComponentType.Name}' is not a Component.");
-                }
-
-                var component = this.GetOrAddComponent(attribute.ComponentType);
-
-                if (string.IsNullOrEmpty(attribute.FieldName)) {
-                    return;
-                }
-
-                var fieldInfo = this.GetType().GetField(attribute.FieldName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-                if (fieldInfo == null) {
-                    throw new NotSupportedException($"The AttachComponentToField attribute could not assign to field with name '{attribute.FieldName}' on class '{this.GetType().Name}', because it does not exist.");
-                }
-                else if (fieldInfo.IsInitOnly) {
-                    throw new NotSupportedException($"The AttachComponentToField attribute could not assign to field with name '{attribute.FieldName}' on class '{this.GetType().Name}', because it is a read only field.");
-                }
-                else if (fieldInfo.FieldType != attribute.ComponentType) {
-                    throw new NotSupportedException($"The AttachComponentToField attribute could not assign to field with name '{attribute.FieldName}' on class '{this.GetType().Name}', because the field is not of the same type.");
-                }
-
-                fieldInfo.SetValue(this, component);
-
-                if (component is MonoBehaviour behaviour) {
-                    behaviour.enabled = attribute.StartEnabled;
-                }
-            }
         }
     }
 }
