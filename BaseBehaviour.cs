@@ -150,7 +150,7 @@
             var properties = type.GetProperties(flags);
 
             foreach (var property in properties) {
-                if (property.CanWrite && property.PropertyType.IsSubclassOf(typeof(Component)) && property.GetSetMethod() != null && property.GetGetMethod() != null) {
+                if (property.CanWrite && property.PropertyType.IsSubclassOf(typeof(Component)) && property.GetSetMethod() != null) {
                     var attributes = property.GetCustomAttributes(typeof(AttachComponentAttribute), true);
 
                     if (attributes.FirstOrDefault() is AttachComponentAttribute attachAttribute) {
