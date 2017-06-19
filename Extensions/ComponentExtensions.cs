@@ -43,7 +43,12 @@ namespace BrettMStory.Unity2D.Extensions {
         /// <param name="component">The component.</param>
         /// <returns>The behaviour that was retrieved or added.</returns>
         public static T GetOrAddBehaviour<T>(this Component component) where T : MonoBehaviour {
-            return component.GetComponent<T>() ?? component.gameObject.AddComponent<T>();
+            var foundBehaviour = component.GetComponent<T>();
+            if (foundBehaviour == null) {
+                return component.gameObject.AddComponent<T>();
+            }
+
+            return foundBehaviour;
         }
 
         /// <summary>
@@ -53,7 +58,12 @@ namespace BrettMStory.Unity2D.Extensions {
         /// <param name="type">The type.</param>
         /// <returns>The component that was retrieved or added</returns>
         public static Component GetOrAddComponent(this Component component, Type type) {
-            return component.GetComponent(type) ?? component.gameObject.AddComponent(type);
+            var foundComponent = component.GetComponent(type);
+            if (foundComponent == null) {
+                return component.gameObject.AddComponent(type);
+            }
+
+            return foundComponent;
         }
     }
 }

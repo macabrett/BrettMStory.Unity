@@ -170,8 +170,8 @@
                     var attributes = field.GetCustomAttributes(typeof(AttachComponentAttribute), true);
                     if (attributes.FirstOrDefault() is AttachComponentAttribute attachAttribute) {
                         var component = this.GetOrAddComponent(field.FieldType);
-                        Debug.Log(component);
                         field.SetValue(this, component);
+
                         if (component is MonoBehaviour behaviour) {
                             behaviour.enabled = attachAttribute.StartEnabled;
                         }
