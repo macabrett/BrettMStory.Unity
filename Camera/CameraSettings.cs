@@ -8,6 +8,54 @@
     public struct CameraSettings {
 
         /// <summary>
+        /// Gets the margin.
+        /// </summary>
+        /// <value>The margin.</value>
+        public readonly Margin Margin;
+
+        /// <summary>
+        /// Gets the maximum position.
+        /// </summary>
+        /// <value>The maximum position.</value>
+        public readonly Vector2 MaximumPosition;
+
+        /// <summary>
+        /// Gets the minimum position.
+        /// </summary>
+        /// <value>The minimum position.</value>
+        public readonly Vector2 MinimumPosition;
+
+        /// <summary>
+        /// Gets the size of the orthographic.
+        /// </summary>
+        /// <value>The size of the orthographic.</value>
+        public readonly float OrthographicSize;
+
+        /// <summary>
+        /// Gets the height of the screen.
+        /// </summary>
+        /// <value>The height of the screen.</value>
+        public readonly int ScreenHeight;
+
+        /// <summary>
+        /// Gets the width of the screen.
+        /// </summary>
+        /// <value>The width of the screen.</value>
+        public readonly int ScreenWidth;
+
+        /// <summary>
+        /// Gets the height of the screen world.
+        /// </summary>
+        /// <value>The height of the screen world.</value>
+        public readonly float ScreenWorldHeight;
+
+        /// <summary>
+        /// Gets the width of the screen world.
+        /// </summary>
+        /// <value>The width of the screen world.</value>
+        public readonly float ScreenWorldWidth;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CameraSettings"/> struct.
         /// </summary>
         /// <param name="camera">The camera.</param>
@@ -41,53 +89,5 @@
             this.MinimumPosition = new Vector2(leftMostEdge + halfScreenWorldWidth - this.Margin.Left, bottomMostEdge + this.OrthographicSize - this.Margin.Bottom);
             this.MaximumPosition = new Vector2(rightMostEdge - halfScreenWorldWidth + this.Margin.Right, topMostEdge - this.OrthographicSize + this.Margin.Top);
         }
-
-        /// <summary>
-        /// Gets the margin.
-        /// </summary>
-        /// <value>The margin.</value>
-        public Margin Margin { get; private set; }
-
-        /// <summary>
-        /// Gets the maximum position.
-        /// </summary>
-        /// <value>The maximum position.</value>
-        public Vector2 MaximumPosition { get; private set; }
-
-        /// <summary>
-        /// Gets the minimum position.
-        /// </summary>
-        /// <value>The minimum position.</value>
-        public Vector2 MinimumPosition { get; private set; }
-
-        /// <summary>
-        /// Gets the size of the orthographic.
-        /// </summary>
-        /// <value>The size of the orthographic.</value>
-        public float OrthographicSize { get; private set; }
-
-        /// <summary>
-        /// Gets the height of the screen.
-        /// </summary>
-        /// <value>The height of the screen.</value>
-        public int ScreenHeight { get; private set; }
-
-        /// <summary>
-        /// Gets the width of the screen.
-        /// </summary>
-        /// <value>The width of the screen.</value>
-        public int ScreenWidth { get; private set; }
-
-        /// <summary>
-        /// Gets the height of the screen world.
-        /// </summary>
-        /// <value>The height of the screen world.</value>
-        public float ScreenWorldHeight { get; private set; }
-
-        /// <summary>
-        /// Gets the width of the screen world.
-        /// </summary>
-        /// <value>The width of the screen world.</value>
-        public float ScreenWorldWidth { get; private set; }
     }
 }

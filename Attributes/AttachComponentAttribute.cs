@@ -27,6 +27,6 @@
         /// Gets a value indicating whether [start enabled].
         /// </summary>
         /// <value><c>true</c> if [start enabled]; otherwise, <c>false</c>.</value>
-        public bool StartEnabled { get; private set; }
+        public bool StartEnabled { get; }
     }
 }

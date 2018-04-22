@@ -6,6 +6,30 @@
     public struct Margin {
 
         /// <summary>
+        /// Gets or sets the bottom.
+        /// </summary>
+        /// <value>The bottom.</value>
+        public readonly float Bottom;
+
+        /// <summary>
+        /// Gets the left.
+        /// </summary>
+        /// <value>The left.</value>
+        public readonly float Left;
+
+        /// <summary>
+        /// Gets the right.
+        /// </summary>
+        /// <value>The right.</value>
+        public readonly float Right;
+
+        /// <summary>
+        /// Gets or sets the top.
+        /// </summary>
+        /// <value>The top.</value>
+        public readonly float Top;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Margin"/> struct.
         /// </summary>
         /// <param name="top">The top.</param>
@@ -46,31 +70,7 @@
         /// Gets the zero.
         /// </summary>
         /// <value>The zero.</value>
-        public static Margin Zero { get { return new Margin(0f); } }
-
-        /// <summary>
-        /// Gets or sets the bottom.
-        /// </summary>
-        /// <value>The bottom.</value>
-        public float Bottom { get; private set; }
-
-        /// <summary>
-        /// Gets the left.
-        /// </summary>
-        /// <value>The left.</value>
-        public float Left { get; private set; }
-
-        /// <summary>
-        /// Gets the right.
-        /// </summary>
-        /// <value>The right.</value>
-        public float Right { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the top.
-        /// </summary>
-        /// <value>The top.</value>
-        public float Top { get; private set; }
+        public static Margin Zero { get; } = new Margin(0f);
 
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.
