@@ -20,11 +20,6 @@
         private const string BusyCoroutineName = "BusyDelay";
 
         /// <summary>
-        /// A value indicating whether or not this behaviour is busy.
-        /// </summary>
-        private bool _isBusy = false;
-
-        /// <summary>
         /// Gets the gameo object attached to this behaviour.
         /// </summary>
         public GameObject GameObject {
@@ -36,15 +31,7 @@
         /// <summary>
         /// Gets or sets a value indicating whether or not this is busy.
         /// </summary>
-        public bool IsBusy {
-            get {
-                return this._isBusy;
-            }
-
-            set {
-                this._isBusy = value;
-            }
-        }
+        public bool IsBusy { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the parent of this behaviour.
@@ -136,11 +123,11 @@
         /// <returns>An IEnumerator.</returns>
         protected IEnumerator BusyDelay(float timeToDelay) {
             try {
-                this._isBusy = true;
+                this.IsBusy = true;
                 yield return new WaitForSeconds(timeToDelay);
             }
             finally {
-                this._isBusy = false;
+                this.IsBusy = false;
             }
         }
 
